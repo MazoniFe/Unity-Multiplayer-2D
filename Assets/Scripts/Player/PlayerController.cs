@@ -61,14 +61,18 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private void Update()
     {
         if (!itsLocalPlayer) return;
+        Inputs();
+    }
+
+    private void FixedUpdate()
+    {
+        if (!itsLocalPlayer) return;
         if (isDied)
         {
-            this.GetComponent<PhotonView>().RPC("ChangeAnimationState", RpcTarget.All, PLAYER_DIE);
+            photonView.RPC("ChangeAnimationState", RpcTarget.All, PLAYER_DIE);
             return;
         }
 
-
-        Inputs();
         moveHorizontal = Input.GetAxisRaw("Horizontal");
         moveVertical = Input.GetAxisRaw("Vertical");
         if (moveHorizontal != 0 && isDied == false)
