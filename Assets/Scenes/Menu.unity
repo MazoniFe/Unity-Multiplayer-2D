@@ -1400,7 +1400,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1235146839
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1439,6 +1439,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerName: {fileID: 1324973380}
   _roomName: {fileID: 116360291}
+  _roomList: {fileID: 0}
 --- !u!114 &1235146841
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ public class EntryRoom : MonoBehaviour
 {
     [SerializeField]private Text _playerName;
     [SerializeField]private Text _roomName;
+    [SerializeField] private Text _roomList;
 
 
     public void CreateRoom()
@@ -18,5 +20,10 @@ public class EntryRoom : MonoBehaviour
     {
         NetworkManager.networkInstantiate.ChangeNickname(_playerName.text);
         NetworkManager.networkInstantiate.NetworkJoinRoom(_roomName.text);
+    }
+
+    public void ShowRooms()
+    {
+        
     }
 }

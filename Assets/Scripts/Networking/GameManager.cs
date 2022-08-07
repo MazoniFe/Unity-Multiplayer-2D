@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             return;
         }
         networkGameManager = this;
-        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(transform.root.gameObject);
     }
 
     private void Start()

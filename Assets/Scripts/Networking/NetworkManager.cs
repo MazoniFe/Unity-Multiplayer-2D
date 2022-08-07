@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,7 +17,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             return;
         }
         networkInstantiate = this;
-        DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(transform.root.gameObject);
     }
 
     private void Start()
@@ -47,7 +48,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LoadLevel(_sceneName);
     }
-
     public void ChangeNickname(string _nickname)
     {
         PhotonNetwork.NickName = _nickname;

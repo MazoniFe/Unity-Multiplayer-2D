@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     private void Awake()
     {
+        isDied = false;
         _animator = GetComponent<Animator>();
         playerSprite = GetComponent<SpriteRenderer>();
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -59,15 +60,18 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     private void Update()
     {
-        if (!itsLocalPlayer || isDied) return;
+        if (!itsLocalPlayer) return;
+        if (isDied)
+        {
+            this.GetComponent<PhotonView>().RPC("ChangeAnimationState", RpcTarget.All, PLAYER_DIE);
+            return;
+        }
 
-
-        moveHorizontal = Input.GetAxisRaw("Horizontal");
-        moveVertical = Input.GetAxisRaw("Vertical");
 
         Inputs();
-
-        if (moveHorizontal != 0 && !isDied)
+        moveHorizontal = Input.GetAxisRaw("Horizontal");
+        moveVertical = Input.GetAxisRaw("Vertical");
+        if (moveHorizontal != 0 && isDied == false)
         {
             MovePlayer();
             this.GetComponent<PhotonView>().RPC("ChangeAnimationState", RpcTarget.All, PLAYER_RUN);
@@ -80,13 +84,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         if (Input.GetKey(KeyCode.Space)) Jump();
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (!canSpawnBomb) return;
             SpawnBomb();
         }
     }
 
     private void SpawnBomb()
     {
+        if (!canSpawnBomb) return;
         var bomb = PhotonNetwork.Instantiate(_bombPath, new Vector2(transform.position.x, transform.position.y + 0.8f), Quaternion.identity);
         canSpawnBomb = false;
         StartCoroutine(SpawnBombCd(2.0f));
@@ -102,7 +106,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     private void Jump()
     {
-        if (_rigidbody.velocity.y != 0) return;
+        if (_rigidbody.velocity.y != 0 || isDied) return;
         else _rigidbody.AddForce(transform.up * forceJump, ForceMode2D.Impulse);
     }
 
@@ -134,9 +138,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (collision.gameObject.tag == "Bomb")
         {
-            ChangeAnimationState(PLAYER_DIE);
             isDied = true;
-            
+            ChangeAnimationState(PLAYER_DIE);
         }
     }
 

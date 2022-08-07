@@ -8,6 +8,7 @@ public class bomb : MonoBehaviourPunCallbacks, IPunObservable
 {
     private Animator animator;
     private float animationTime = 0f;
+    private GameObject explosion;
 
 
     private void Awake()
@@ -21,14 +22,14 @@ public class bomb : MonoBehaviourPunCallbacks, IPunObservable
     private void Start()
     {
         animator = GetComponent<Animator>();
-        StartCoroutine(WaitToExplosion(6.0f));
+        StartCoroutine(WaitToExplosion(4.0f));
 
     }
 
 
     private void Update()
     {
-        animationTime += 0.35f * Time.deltaTime;
+        animationTime += 0.85f * Time.deltaTime;
         animator.speed += animationTime * Time.deltaTime;
     }
 
@@ -37,30 +38,18 @@ public class bomb : MonoBehaviourPunCallbacks, IPunObservable
     IEnumerator WaitToExplosion(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.Destroy(this.gameObject);
-        }
+        Destroy(this.gameObject);
         Explosion();
     }
 
 
     private void Explosion()
     {
-        var explosion = PhotonNetwork.Instantiate("explosion", new Vector2(transform.position.x, transform.position.y), Quaternion.identity);
+        explosion = PhotonNetwork.Instantiate("explosion", new Vector2(transform.position.x, transform.position.y), Quaternion.identity);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (stream.IsWriting)
-        {
-            
-
-        }
-        else
-        {
-            
-        }
     }
 
 

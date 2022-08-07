@@ -13,10 +13,7 @@ public class explosion : MonoBehaviourPunCallbacks
     IEnumerator DestroyObject(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
-        if (PhotonNetwork.IsMasterClient)
-        {
-        PhotonNetwork.Destroy(this.gameObject);
-        }
+        Destroy(this.gameObject);
     }
 }
 
